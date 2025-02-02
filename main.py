@@ -94,13 +94,14 @@ def get_next_api_key_model():
                             INSERT INTO usage (api_key, model, count, last_reset, is_rate_limited)
                             VALUES (?, ?, 1, ?, FALSE)
                         ''', (api_key, model, datetime.now().isoformat()))
+                        notify_change(model, api_key, label)
                     else:
-                        cursor.execute('''
-                            UPDATE usage SET count = count + 1
-                            WHERE api_key = ? AND model = ?
-                        ''', (api_key, model))
+                        # cursor.execute('''
+                        #     UPDATE usage SET count = count + 1
+                        #     WHERE api_key = ? AND model = ?
+                        # ''', (api_key, model))
+                        pass
                     conn.commit()
-                    notify_change(model, api_key, label)
                     return api_key, model
         raise HTTPException(status_code=429, detail="API limit reached for all keys and models")
 

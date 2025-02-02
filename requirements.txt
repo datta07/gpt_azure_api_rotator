@@ -1,0 +1,4 @@
+fastapi
+uvicorn
+pycryptodome
+sqlite3

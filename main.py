@@ -156,6 +156,8 @@ def callRealAPI(api_key: str, model: str, payload: dict):
         if response.status_code == 429:  # Rate limit exceeded
             mark_rate_limited(api_key, model)  # Mark the key as rate-limited
             raise HTTPException(status_code=429, detail=f"Rate limit exceeded for API key {api_key} and model {model}")
+        if response.status_code == 413:  # Payload limit exceeded
+            raise HTTPException(status_code=413, detail=f"Payload size exceed for API key {api_key} and model {model}")
         else:
             raise HTTPException(status_code=500, detail=f"Error calling real API: {str(e)}")
     except requests.exceptions.RequestException as e:
